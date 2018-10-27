@@ -36,19 +36,20 @@ public class LifeRayService {
 		logger.info("Fetching for Create Goal: " + ruleDataModel);
 		try{
 			RuleResponse dataServiceResponse = dataService.getLatestTypeOfGoal(ruleDataModel.getUserId());
-			
-			List<String> createGoalMapping = Arrays.asList(env.getProperty(LiferayConstant.CREATEGOALMAPPING).split(","));
-			System.out.println(createGoalMapping);
-			String tyOfGoal = null;
-			List<Map<String, Object>> createGoalArticles = null;
-			if(createGoalMapping.contains(dataServiceResponse.getData().getTypeOfGoals())){
-				logger.info("Fetching type of Goal from property: " + ruleDataModel);
-				tyOfGoal = env.getProperty(dataServiceResponse.getData().getTypeOfGoals());
-			}else
-				tyOfGoal = dataServiceResponse.getData().getTypeOfGoals();
-			createGoalArticles = dataService.fetchArticles(tyOfGoal, Integer.parseInt(env.getProperty(LiferayConstant.CREATEGOALLIMIT)));
-			articleMap.put(LiferayConstant.CREATEGOAL, createGoalArticles);
-			
+			if(dataServiceResponse != null) {
+				List<String> createGoalMapping = Arrays.asList(env.getProperty(LiferayConstant.CREATEGOALMAPPING).split(","));
+				System.out.println(createGoalMapping);
+				String tyOfGoal = null;
+				List<Map<String, Object>> createGoalArticles = null;
+				if(createGoalMapping.contains(dataServiceResponse.getData().getTypeOfGoals())){
+					logger.info("Fetching type of Goal from property: " + ruleDataModel);
+					tyOfGoal = env.getProperty(dataServiceResponse.getData().getTypeOfGoals());
+				}else
+					tyOfGoal = dataServiceResponse.getData().getTypeOfGoals();
+				ruleDataModel.setTypeOfGoals(tyOfGoal);
+				createGoalArticles = dataService.fetchArticles(tyOfGoal, Integer.parseInt(env.getProperty(LiferayConstant.CREATEGOALLIMIT)));
+				articleMap.put(LiferayConstant.CREATEGOAL, createGoalArticles);
+			}
 			logger.info("After Create Goal article is: " + articleMap);
 			logger.info("Applying rules for Members ratio: " + ruleDataModel);
 			

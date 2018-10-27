@@ -1,5 +1,7 @@
 package com.liferay.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,8 +32,7 @@ public class RulesRestController {
 	LifeRayService lifeRayService;
 
 	@RequestMapping(value = LiferayConstant.APPLYRULES, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public RuleResponse applyRules(@RequestBody RuleDataModel ruleDataModel) throws Exception {
-		logger.info("Request received to apply Rules. Input data is: " + ruleDataModel);
+	public RuleResponse applyRules(@RequestBody RuleDataModel ruleDataModel, HttpServletResponse response) throws Exception {
 		return lifeRayService.fetchAndApplyRules(ruleDataModel);
 	}
 
