@@ -76,20 +76,27 @@ public class LifeRayService {
 							articleMap.put(LiferayConstant.EARN, earnArticles);						
 						} 
 						if(ruleServiceResponse.getData().getManage() > 0){
-							List<Map<String, Object>> earnArticles = dataService.fetchArticles(env.getProperty(LiferayConstant.FILTERMANAGE), ruleServiceResponse.getData().getManage());
-							articleMap.put(LiferayConstant.MANAGE, earnArticles);
+							List<Map<String, Object>> manageArticles = dataService.fetchArticles(env.getProperty(LiferayConstant.FILTERMANAGE), ruleServiceResponse.getData().getManage());
+							articleMap.put(LiferayConstant.MANAGE, manageArticles);
 						}
 						if(ruleServiceResponse.getData().getSave() > 0){
-							List<Map<String, Object>> earnArticles = dataService.fetchArticles(env.getProperty(LiferayConstant.FILTERSAVE), ruleServiceResponse.getData().getSave());
-							articleMap.put(LiferayConstant.SAVE, earnArticles);
+							if(env.getProperty(LiferayConstant.FILTERSAVE).equals(ruleDataModel.getTypeOfGoals())){
+								List<Map<String, Object>> saveArticles = dataService.fetchArticles(env.getProperty(LiferayConstant.FILTERSAVE), ruleServiceResponse.getData().getSave()+1);
+								if(saveArticles != null && saveArticles.size() > 0)
+									saveArticles.remove(0);
+								articleMap.put(LiferayConstant.SAVE, saveArticles);
+							}else{
+								List<Map<String, Object>> saveArticles = dataService.fetchArticles(env.getProperty(LiferayConstant.FILTERSAVE), ruleServiceResponse.getData().getSave());
+								articleMap.put(LiferayConstant.SAVE, saveArticles);
+							}
 						}
 						if(ruleServiceResponse.getData().getProtect() > 0){
-							List<Map<String, Object>> earnArticles = dataService.fetchArticles(env.getProperty(LiferayConstant.FILTERPROTECT), ruleServiceResponse.getData().getProtect());
-							articleMap.put(LiferayConstant.PROTECT, earnArticles);
+							List<Map<String, Object>> protectArticles = dataService.fetchArticles(env.getProperty(LiferayConstant.FILTERPROTECT), ruleServiceResponse.getData().getProtect());
+							articleMap.put(LiferayConstant.PROTECT, protectArticles);
 						}
 						if(ruleServiceResponse.getData().getGrow() > 0){
-							List<Map<String, Object>> earnArticles = dataService.fetchArticles(env.getProperty(LiferayConstant.FILTERGROW), ruleServiceResponse.getData().getGrow());
-							articleMap.put(LiferayConstant.GROW, earnArticles);
+							List<Map<String, Object>> growArticles = dataService.fetchArticles(env.getProperty(LiferayConstant.FILTERGROW), ruleServiceResponse.getData().getGrow());
+							articleMap.put(LiferayConstant.GROW, growArticles);
 						}
 				ruleServiceResponse.setArticleMap(articleMap);
 			}
